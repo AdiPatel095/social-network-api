@@ -89,6 +89,18 @@ export const addReaction = async (req: Request, res: Response) => {
   }
 };
 
+export const getReactions = async (req: Request, res: Response) => {
+  try {
+    const thought = await Thought.findById(req.params.thoughtId).select('reactions');
+    if (!thought) {
+      return res.status(404).json({ message: 'No thought with that ID' });
+    }
+    res.json(thought.reactions);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+
 export const removeReaction = async (req: Request, res: Response) => {
   try {
     const thought = await Thought.findByIdAndUpdate(
